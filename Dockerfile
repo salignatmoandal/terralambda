@@ -13,6 +13,6 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /usr/local/bin/terralambda ./cmd/main.go
+RUN go install ./cmd/
 
 ENTRYPOINT ["terralambda"]
