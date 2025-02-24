@@ -4,7 +4,10 @@ go 1.23.4
 
 require github.com/aws/aws-sdk-go-v2/config v1.29.7
 
-require github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.10 // indirect
+require (
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.10 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
+)
 
 require (
 	github.com/aws/aws-lambda-go v1.47.0 // indirect
@@ -24,4 +27,5 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/spf13/cobra v1.9.1 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
+	go.uber.org/zap v1.27.0
 )

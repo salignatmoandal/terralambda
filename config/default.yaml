@@ -1,0 +1,12 @@
+aws:
+  region: us-east-1
+  profile: default
+
+lambda:
+  runtime: go1.x
+  memory: 128
+  timeout: 30
+
+terraform:
+  backend: local
+  workspace: dev 
