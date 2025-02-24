@@ -20,26 +20,26 @@ func NewDeployer(ctx context.Context, workingDir string) *LambdaDeployer {
 }
 
 func (d *LambdaDeployer) Deploy(functionName string, zipPath string) error {
-	// Compile the lambda
-	if err := d.compileLambda(); err != nil {
-		return fmt.Errorf("erreur de compilation: %w", err)
+	operations := []struct {
+		name string
+		fn   func() error
+	}{
+		{"compile", d.compileLambda},
+		{"create ZIP", d.createZip},
+		{"terraform deployment", d.applyTerraform},
 	}
 
-	// Création du ZIP
-	if err := d.createZip(); err != nil {
-		return fmt.Errorf("erreur de création du ZIP: %w", err)
-	}
-
-	// Déploiement Terraform
-	if err := d.applyTerraform(); err != nil {
-		return fmt.Errorf("erreur de déploiement Terraform: %w", err)
+	for _, op := range operations {
+		if err := op.fn(); err != nil {
+			return fmt.Errorf("error during %s: %w", op.name, err)
+		}
 	}
 
 	return nil
 }
 
 func (d *LambdaDeployer) Cleanup() error {
-	// Nettoyage des fichiers temporaires
+	// Clean up temporary files
 	return nil
 }
 
@@ -48,7 +48,7 @@ func (d *LambdaDeployer) compileLambda() error {
 	cmd.Dir = d.workingDir
 
 	if output, err := cmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("échec de la compilation: %v, sortie: %s", err, output)
+		return fmt.Errorf("compilation failed: %v, output: %s", err, output)
 	}
 	return nil
 }
@@ -58,7 +58,7 @@ func (d *LambdaDeployer) createZip() error {
 	cmd.Dir = d.workingDir
 
 	if output, err := cmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("échec de la création du ZIP: %v, sortie: %s", err, output)
+		return fmt.Errorf("ZIP creation failed: %v, output: %s", err, output)
 	}
 	return nil
 }
@@ -67,13 +67,13 @@ func (d *LambdaDeployer) applyTerraform() error {
 	cmd := exec.CommandContext(d.ctx, "terraform", "init")
 	cmd.Dir = filepath.Join(d.workingDir, "deployments", "terraform")
 	if output, err := cmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("échec de terraform init: %v, sortie: %s", err, output)
+		return fmt.Errorf("terraform init failed: %v, output: %s", err, output)
 	}
 
 	cmd = exec.CommandContext(d.ctx, "terraform", "apply", "-auto-approve")
 	cmd.Dir = filepath.Join(d.workingDir, "deployments", "terraform")
 	if output, err := cmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("échec de terraform apply: %v, sortie: %s", err, output)
+		return fmt.Errorf("terraform apply failed: %v, output: %s", err, output)
 	}
 
 	return nil
