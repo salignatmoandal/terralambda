@@ -118,12 +118,12 @@ resource "aws_lambda_function" "test" {
   filename         = "../../function.zip"
   function_name    = "test-function"
   role            = aws_iam_role.lambda_exec.arn
-  handler         = "main"
+  handler         = "bootstrap"
   runtime         = "provided.al2"
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "test_lambda_role"
+  name = "test_lambda_role_"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{

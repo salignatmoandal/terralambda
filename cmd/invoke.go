@@ -1,42 +1,33 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"log"
-	"os"
 
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/lambda"
-
+	"github.com/salignatmoandal/terralambda/internal/lambda"
 	"github.com/spf13/cobra"
 )
 
 var invokeCmd = &cobra.Command{
-	Use:   "invoke [lambda-name] [pa]",
-	Short: "Invoke the Lambda function",
+	Use:   "invoke [function-name]",
+	Short: "Invoke a Lambda function",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		lambdaName := args[0]
-		payload := args[1]
+		ctx := cmd.Context()
+		functionName := args[0]
 
-		cfg, err := config.LoadDefaultConfig(context.TODO())
+		invoker, err := lambda.NewInvoker(ctx)
 		if err != nil {
-			log.Fatalf("Failed to load AWS config: %v", err)
-		}
-		client := lambda.NewFromConfig(cfg)
-
-		input := &lambda.InvokeInput{
-			FunctionName:   &lambdaName,
-			Payload:        []byte(payload),
-			InvocationType: "RequestResponse",
+			fmt.Printf("Error creating invoker: %v\n", err)
+			return
 		}
 
-		resp, err := client.Invoke(context.TODO(), input)
+		payload := []byte("{}")
+		response, err := invoker.Invoke(functionName, payload)
 		if err != nil {
-			log.Fatalf("Failed to invoke Lambda function: %v", err)
-
+			fmt.Printf("Error invoking function: %v\n", err)
+			return
 		}
-		fmt.Printf("Lambda function invoked successfully. Response: %s\n", string(resp.Payload))
-		os.Exit(0)
+
+		fmt.Printf("Response: %s\n", string(response))
 	},
 }
