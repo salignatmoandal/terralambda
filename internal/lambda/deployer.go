@@ -44,8 +44,8 @@ func (d *LambdaDeployer) Cleanup() error {
 }
 
 func (d *LambdaDeployer) compileLambda() error {
-	cmd := exec.CommandContext(d.ctx, "go", "build", "-o", "main")
-	cmd.Dir = filepath.Join(d.workingDir, "lambda") // Utilise le répertoire lambda existant
+	cmd := exec.CommandContext(d.ctx, "go", "build", "-o", "bootstrap")
+	cmd.Dir = filepath.Join(d.workingDir, "lambda")
 
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("compilation failed: %v, output: %s", err, output)
@@ -54,10 +54,8 @@ func (d *LambdaDeployer) compileLambda() error {
 }
 
 func (d *LambdaDeployer) createZip() error {
-	// Se déplacer dans le répertoire lambda
-	cmd := exec.CommandContext(d.ctx, "zip", "-r", "../function.zip", "main")
+	cmd := exec.CommandContext(d.ctx, "zip", "-r", "../function.zip", "bootstrap")
 	cmd.Dir = filepath.Join(d.workingDir, "lambda")
-
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("ZIP creation failed: %v, output: %s", err, output)
 	}

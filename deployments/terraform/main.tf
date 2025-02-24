@@ -6,7 +6,7 @@ resource "aws_lambda_function" "terralambda_fn" {
   function_name = "TerraLambdaExample"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "main"
-  runtime       = "go1.x"
+  runtime       = "provided.al2"
   filename      = "${path.module}/../../function.zip"
 }
 
