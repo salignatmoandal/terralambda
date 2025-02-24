@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
 
+	"github.com/salignatmoandal/terralambda/internal/lambda"
 	"github.com/spf13/cobra"
 )
 
@@ -14,25 +14,21 @@ var deployCmd = &cobra.Command{
 	Use:   "deploy",
 	Short: "Deploy a new version of the Lambda function",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Compiling lambda project...")
-
-		// Compile the Go code for AWS Lambda
-		if err := exec.Command("go", "build", "-o", "lambda", "main.go").Run(); err != nil {
-			fmt.Println("Error compiling lambda project:", err)
+		ctx := cmd.Context()
+		workingDir, err := os.Getwd()
+		if err != nil {
+			fmt.Println("Error retrieving working directory:", err)
 			return
 		}
-		exec.Command("zip", "-r", "lambda.zip", "lambda").Run()
 
-		// Execute the Terraform code
-		fmt.Println("Deploying Terraform code...")
-		tf := exec.Command("terraform", "apply", "-auto-approve")
-		tf.Stdout = os.Stdout
-		tf.Stderr = os.Stderr
-		if err := tf.Run(); err != nil {
-			fmt.Println("Error deploying Terraform code:", err)
+		deployer := lambda.NewDeployer(ctx, workingDir)
+		defer deployer.Cleanup()
+
+		if err := deployer.Deploy("", ""); err != nil {
+			fmt.Println("Error deploying:", err)
 			return
 		}
-		fmt.Println("Terraform code deployed successfully.")
 
+		fmt.Println("Deployment successful.")
 	},
 }
