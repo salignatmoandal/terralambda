@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
@@ -18,7 +18,14 @@ jobs:
           go-version: '1.21'
           
       - name: Run tests
-        run: go test -v ./...
+        run: make test
         
       - name: Build Docker image
         run: docker build -t terralambda .
+        
+      - name: Run Docker tests
+        run: |
+          docker run --rm \
+            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+            terralambda test 
