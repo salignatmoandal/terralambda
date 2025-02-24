@@ -1,7 +1,7 @@
 .PHONY: build test clean run
 
-build:
-	go build -o bin/terralambda ./cmd/main.go
+build: clean
+	go build -o bin/terralambda ./cmd/
 
 test:
 	go test -v ./...

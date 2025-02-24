@@ -7,7 +7,7 @@ resource "aws_lambda_function" "terralambda_fn" {
   role          = aws_iam_role.lambda_exec.arn
   handler       = "main"
   runtime       = "go1.x"
-  filename      = "../../function.zip"
+  filename      = "${path.module}/../../function.zip"
 }
 
 resource "aws_iam_role" "lambda_exec" {
