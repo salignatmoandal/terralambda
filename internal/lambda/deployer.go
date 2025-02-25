@@ -7,11 +7,13 @@ import (
 	"path/filepath"
 )
 
+// LambdaDeployer handles the deployment process
 type LambdaDeployer struct {
 	ctx        context.Context
 	workingDir string
 }
 
+// NewDeployer creates a new LambdaDeployer instance
 func NewDeployer(ctx context.Context, workingDir string) *LambdaDeployer {
 	return &LambdaDeployer{
 		ctx:        ctx,
@@ -19,32 +21,32 @@ func NewDeployer(ctx context.Context, workingDir string) *LambdaDeployer {
 	}
 }
 
+// Deploy compiles, packages, and deploys the Lambda function
 func (d *LambdaDeployer) Deploy(functionName string, zipPath string) error {
-	// Compile dans le répertoire lambda existant
 	if err := d.compileLambda(); err != nil {
-		return fmt.Errorf("erreur de compilation: %w", err)
+		return fmt.Errorf("error during compilation: %w", err)
 	}
 
-	// Créer le ZIP dans le répertoire de travail
 	if err := d.createZip(); err != nil {
-		return fmt.Errorf("erreur de création du ZIP: %w", err)
+		return fmt.Errorf("error creating ZIP: %w", err)
 	}
 
-	// Déployer avec Terraform
 	if err := d.applyTerraform(); err != nil {
-		return fmt.Errorf("erreur de déploiement Terraform: %w", err)
+		return fmt.Errorf("error applying Terraform: %w", err)
 	}
 
 	return nil
 }
 
+// Cleanup removes temporary files
 func (d *LambdaDeployer) Cleanup() error {
-	// Clean up temporary files
+	// Add cleanup logic if necessary
 	return nil
 }
 
+// compileLambda compiles the Go Lambda function into an executable
 func (d *LambdaDeployer) compileLambda() error {
-	cmd := exec.CommandContext(d.ctx, "go", "build", "-o", "bootstrap")
+	cmd := exec.CommandContext(d.ctx, "go", "build", "-o", "bootstrap", "main.go")
 	cmd.Dir = filepath.Join(d.workingDir, "lambda")
 
 	if output, err := cmd.CombinedOutput(); err != nil {
@@ -53,29 +55,30 @@ func (d *LambdaDeployer) compileLambda() error {
 	return nil
 }
 
+// createZip packages the Lambda function into a ZIP file
 func (d *LambdaDeployer) createZip() error {
-	cmd := exec.CommandContext(d.ctx, "zip", "-r", "../function.zip", "bootstrap")
+	cmd := exec.CommandContext(d.ctx, "zip", "-j", "function.zip", "bootstrap")
 	cmd.Dir = filepath.Join(d.workingDir, "lambda")
+
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("ZIP creation failed: %v, output: %s", err, output)
 	}
 	return nil
 }
 
+// applyTerraform executes Terraform commands to deploy the Lambda function
 func (d *LambdaDeployer) applyTerraform() error {
 	terraformDir := filepath.Join(d.workingDir, "deployments", "terraform")
 
-	// Initialize Terraform
-	initCmd := exec.CommandContext(d.ctx, "terraform", "init")
-	initCmd.Dir = terraformDir
-	if output, err := initCmd.CombinedOutput(); err != nil {
+	cmd := exec.CommandContext(d.ctx, "terraform", "init")
+	cmd.Dir = terraformDir
+	if output, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("terraform init failed: %v, output: %s", err, output)
 	}
 
-	// Apply Terraform
-	applyCmd := exec.CommandContext(d.ctx, "terraform", "apply", "-auto-approve")
-	applyCmd.Dir = terraformDir
-	if output, err := applyCmd.CombinedOutput(); err != nil {
+	cmd = exec.CommandContext(d.ctx, "terraform", "apply", "-auto-approve")
+	cmd.Dir = terraformDir
+	if output, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("terraform apply failed: %v, output: %s", err, output)
 	}
 
