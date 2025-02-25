@@ -1,7 +1,9 @@
 .PHONY: build test clean run
 
 build:
-	go build -o bin/terralambda ./cmd/root.go
+	@echo "🚀 Building TerraLambda CLI..."
+	mkdir -p bin
+	go build -o bin/terralambda main.go
 
 test:
 	go test -v ./...
@@ -12,4 +14,4 @@ clean:
 	rm -f function.zip
 
 run: build
-	./bin/terralambda 
+	./bin/terralambda

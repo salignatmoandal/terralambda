@@ -13,6 +13,6 @@ RUN go mod download
 
 COPY . .
 
-RUN go install ./cmd/
+RUN go install .
 
 ENTRYPOINT ["terralambda"]
