@@ -5,50 +5,40 @@ import (
 	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	awslambda "github.com/aws/aws-sdk-go-v2/service/lambda"
+	"github.com/aws/aws-sdk-go-v2/service/lambda"
 )
 
-// LambdaInvoker represents an AWS Lambda function invoker
+// LambdaInvoker is responsible for invoking AWS Lambda functions
 type LambdaInvoker struct {
 	ctx    context.Context
-	client *awslambda.Client
+	client *lambda.Client
 }
 
-// NewInvoker creates a new instance of LambdaInvoker
+// NewInvoker creates a new LambdaInvoker instance
 func NewInvoker(ctx context.Context) (*LambdaInvoker, error) {
-	// Load AWS configuration from environment or credentials file
 	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load AWS config: %w", err)
 	}
 
-	// Create AWS Lambda client
-	client := awslambda.NewFromConfig(cfg)
-
+	client := lambda.NewFromConfig(cfg)
 	return &LambdaInvoker{
 		ctx:    ctx,
 		client: client,
 	}, nil
 }
 
-// Invoke calls the specified AWS Lambda function with the given payload
+// Invoke calls an AWS Lambda function
 func (i *LambdaInvoker) Invoke(functionName string, payload []byte) ([]byte, error) {
-	// Prepare the input parameters for Lambda invocation
-	input := &awslambda.InvokeInput{
+	input := &lambda.InvokeInput{
 		FunctionName:   &functionName,
 		Payload:        payload,
 		InvocationType: "RequestResponse",
 	}
 
-	// Call the Lambda function
 	resp, err := i.client.Invoke(i.ctx, input)
 	if err != nil {
-		return nil, fmt.Errorf("failed to invoke Lambda function %s: %w", functionName, err)
-	}
-
-	// Check if the function returned an error
-	if resp.FunctionError != nil {
-		return nil, fmt.Errorf("Lambda function %s returned error: %s", functionName, *resp.FunctionError)
+		return nil, fmt.Errorf("failed to invoke Lambda function: %w", err)
 	}
 
 	return resp.Payload, nil
