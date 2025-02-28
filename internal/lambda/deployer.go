@@ -3,6 +3,7 @@ package lambda
 import (
 	"context"
 	"fmt"
+	"os"
 	"os/exec"
 	"path/filepath"
 )
@@ -52,17 +53,31 @@ func (d *LambdaDeployer) compileLambda() error {
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("compilation failed: %v, output: %s", err, output)
 	}
+	// verify if the file "bootstrap" exists
+	if _, err := os.Stat(filepath.Join(d.workingDir, "lambda", "bootstrap")); os.IsNotExist(err) {
+		return fmt.Errorf("bootstrap file not found")
+	}
+	fmt.Println("Lambda compiled successfully")
 	return nil
 }
 
-// createZip packages the Lambda function into a ZIP file
 func (d *LambdaDeployer) createZip() error {
+	fmt.Println(" Creating the ZIP..")
+
 	cmd := exec.CommandContext(d.ctx, "zip", "-j", "function.zip", "bootstrap")
 	cmd.Dir = filepath.Join(d.workingDir, "lambda")
 
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("ZIP creation failed: %v, output: %s", err, output)
 	}
+
+	// Vérifier que le fichier ZIP existe après sa création
+	zipPath := filepath.Join(cmd.Dir, "function.zip")
+	if _, err := os.Stat(zipPath); os.IsNotExist(err) {
+		return fmt.Errorf("Error: the file %s does not exist after the ZIP creation", zipPath)
+	}
+
+	fmt.Println(" ZIP created successfully :", zipPath)
 	return nil
 }
 
