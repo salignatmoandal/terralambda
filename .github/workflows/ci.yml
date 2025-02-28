@@ -25,6 +25,22 @@ jobs:
       - name: Install dependencies
         run: go mod tidy
 
+      # # ✅ Install Terraform
+      # - name: Install Terraform
+      #   run: |
+      #     curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+      #     sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+      #     sudo apt-get update && sudo apt-get install terraform
+
+      # # ✅ Verify Terraform Installation
+      # - name: Verify Terraform Installation
+      #   run: terraform version
+
+      # # ✅ Initialize Terraform for tests
+      # - name: Initialize Terraform
+      #   run: terraform init
+      #   working-directory: terraform/
+
       #  Linting with golangci-lint (replace the manual installation)
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v6
