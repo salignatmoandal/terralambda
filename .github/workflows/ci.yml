@@ -20,12 +20,12 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.21'
-          cache: true  # Utilisation du cache Go pour accélérer le pipeline
+          cache: true  # Use Go cache to speed up the pipeline
 
       - name: Install dependencies
         run: go mod tidy
 
-      # 🔍 Linting avec golangci-lint (remplace l’installation manuelle)
+      #  Linting with golangci-lint (replace the manual installation)
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
@@ -34,7 +34,7 @@ jobs:
           only-new-issues: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 🔍 Vérification du format du code
+      #  Check code formatting
       - name: Check code formatting
         run: |
           if [ -n "$(gofmt -l .)" ]; then 
@@ -42,36 +42,36 @@ jobs:
             exit 1; 
           fi
 
-      # 🔒 Analyse de sécurité avec gosec
+      #  Security analysis with gosec
       - name: Run gosec
         run: |
           go install github.com/securego/gosec/v2/cmd/gosec@latest
           gosec ./...
 
-      # 🔒 Vérification des vulnérabilités avec govulncheck
+      #  Vulnerability check with govulncheck
       - name: Run govulncheck
         run: |
           go install golang.org/x/vuln/cmd/govulncheck@latest
           govulncheck ./...
 
-      # 🔍 Analyse statique avec Staticcheck
+      #  Static analysis with Staticcheck
       - name: Run Staticcheck
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
           staticcheck ./...
 
-      # ⚠️ Vérification des erreurs non gérées avec errcheck
+      #  Check for unhandled errors with errcheck
       - name: Run errcheck
         run: |
           go install github.com/kisielk/errcheck@latest
           errcheck ./...
 
-      # ✅ Exécution des tests avec le détecteur de race condition
+      #  Run tests with race detector
       - name: Run tests with race detector
         run: go test -race ./...
 
   docker:
-    needs: test  # Ne construit l'image Docker que si les tests passent
+    needs: test  # Build the Docker image only if the tests pass
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -87,7 +87,7 @@ jobs:
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             terralambda test 
 
-      # 🔒 Optionnel : Scan de l'image Docker pour détecter les vulnérabilités
+      #  Scan the Docker image for vulnerabilities
       - name: Scan Docker image for vulnerabilities
         run: |
           docker run --rm aquasec/trivy image terralambda

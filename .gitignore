@@ -15,3 +15,14 @@ terraform.rc
 bin/
 *.zip
 *.zip.*
+
+# Docker
+*.tar
+*.tar.*
+*.tar.gz
+*.tar.gz.*
+*.tar.xz
+*.tar.xz.*
+
+# .env
+.env
