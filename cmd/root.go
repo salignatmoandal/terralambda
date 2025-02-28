@@ -25,7 +25,8 @@ func Execute() {
 
 // Initialize all subcommands
 func init() {
-	RootCmd.AddCommand(GetDeployCmd()) // Deploy command
-	RootCmd.AddCommand(GetInvokeCmd()) // Invoke command
-	RootCmd.AddCommand(GetLogsCmd())   // CloudWatch Logging
+	RootCmd.AddCommand(GetDeployCmd())   // Deploy command
+	RootCmd.AddCommand(GetInvokeCmd())   // Invoke command
+	RootCmd.AddCommand(GetLogsCmd())     // CloudWatch Logging
+	RootCmd.AddCommand(GetRollbackCmd()) // Rollback command
 }
