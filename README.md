@@ -11,8 +11,8 @@ TerraLambda is a CLI tool designed to simplify the deployment and invocation of 
 - Manages different versions of Lambda functions to support rollback mechanisms.
 
 3. ## AWS Lambda Invocation
--Allows invoking deployed Lambda functions via the AWS SDK.
--Supports sending payloads to test functions interactively.
+- Allows invoking deployed Lambda functions via the AWS SDK.
+- Supports sending payloads to test functions interactively.
 
 4. ## Rollback Mechanisms (in progress) 
 Uses AWS Lambda versioning and aliases to revert to a previous stable version.
