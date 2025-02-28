@@ -30,7 +30,7 @@ func GetRollbackCmd() *cobra.Command {
 
 			client := lambda.NewFromConfig(cfg)
 
-			// Met à jour l'alias "prod" pour pointer vers l'ancienne version
+			// Update the alias "prod" to point to the previous version
 			aliasName := "prod"
 			input := &lambda.UpdateAliasInput{
 				FunctionName:    aws.String(functionName),
