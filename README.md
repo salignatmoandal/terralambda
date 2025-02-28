@@ -18,3 +18,9 @@ TerraLambda is a CLI tool designed to simplify the deployment and invocation of 
 Uses AWS Lambda versioning and aliases to revert to a previous stable version.
 Integrates Terraform state management to facilitate rollback operations.
 
+# Installation 
+## Prerequesistes 
+- Go (latest stable version)
+- Terraform (installed and configured for AWS)
+- AWS CLI (configured with proper credentials)
+
