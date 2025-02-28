@@ -26,7 +26,11 @@ func GetDeployCmd() *cobra.Command {
 
 			// Create a new Lambda deployer instance
 			deployer := lambda.NewDeployer(ctx, workingDir)
-			defer deployer.Cleanup()
+			defer func() {
+				if err := deployer.Cleanup(); err != nil {
+					fmt.Printf("Error during cleanup: %v\n", err)
+				}
+			}()
 
 			// Execute deployment
 			if err := deployer.Deploy("", ""); err != nil {

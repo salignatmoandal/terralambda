@@ -11,8 +11,11 @@ import (
 func TestDeployer_Deploy(t *testing.T) {
 	// Créer une structure de test temporaire
 	testDir := setupTestEnvironment(t)
-	defer os.RemoveAll(testDir)
-
+	defer func() {
+		if err := os.RemoveAll(testDir); err != nil {
+			t.Errorf("Failed to cleanup test directory: %v", err)
+		}
+	}()
 	ctx := context.Background()
 	deployer := NewDeployer(ctx, testDir)
 
