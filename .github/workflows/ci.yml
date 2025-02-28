@@ -42,13 +42,13 @@ jobs:
             exit 1; 
           fi
 
-      #  Security analysis with gosec
+      #  Security analysis with gosec - Detects exposed credentials, unsafe code, and security vulnerabilities
       - name: Run gosec
         run: |
           go install github.com/securego/gosec/v2/cmd/gosec@latest
           gosec ./...
 
-      #  Vulnerability check with govulncheck
+      # Scan dependencies for known vulnerabilities - Detects security vulnerabilities in Go modules
       - name: Run govulncheck
         run: |
           go install golang.org/x/vuln/cmd/govulncheck@latest
