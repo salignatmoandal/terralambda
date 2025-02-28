@@ -27,6 +27,5 @@ func Execute() {
 func init() {
 	RootCmd.AddCommand(GetDeployCmd()) // Deploy command
 	RootCmd.AddCommand(GetInvokeCmd()) // Invoke command
-	// RootCmd.AddCommand(GetOrchestrateCmd()) // Step Functions Orchestration
-	// RootCmd.AddCommand(GetLogsCmd())        // CloudWatch Logging
+	RootCmd.AddCommand(GetLogsCmd())   // CloudWatch Logging
 }

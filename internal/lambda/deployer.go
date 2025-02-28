@@ -71,7 +71,7 @@ func (d *LambdaDeployer) createZip() error {
 		return fmt.Errorf("ZIP creation failed: %v, output: %s", err, output)
 	}
 
-	// Vérifier que le fichier ZIP existe après sa création
+	// verify if the file "function.zip" exists
 	zipPath := filepath.Join(cmd.Dir, "function.zip")
 	if _, err := os.Stat(zipPath); os.IsNotExist(err) {
 		return fmt.Errorf("Error: the file %s does not exist after the ZIP creation", zipPath)
