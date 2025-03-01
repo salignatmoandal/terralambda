@@ -8,6 +8,6 @@ variable "rollback_version" {
 
 resource "aws_lambda_alias" "lambda_alias" {
   name             = "prod"
-  function_name    = aws_lambda_function.my_lambda.function_name
-  function_version = var.rollback_version  #  Change alias to rollback version
+  function_name    = aws_lambda_function.terralambda_fn.function_name
+  function_version = var.rollback_version
 }
