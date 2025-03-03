@@ -2,12 +2,25 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# Ajout d'une ressource null_resource pour créer le ZIP avant le déploiement
+resource "null_resource" "lambda_zip" {
+  provisioner "local-exec" {
+    command = "cd ../../lambda && GOOS=linux GOARCH=amd64 go build -o bootstrap main.go && zip function.zip bootstrap && mv function.zip ../deployments/terraform/"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
+
 resource "aws_lambda_function" "terralambda_fn" {
   function_name = "TerraLambdaExample"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "bootstrap"
   runtime       = "provided.al2"
-  filename      = "${path.module}/../../function.zip"
+  filename      = "${path.module}/function.zip"
+  
+  depends_on = [null_resource.lambda_zip]
 }
 
 resource "aws_iam_role" "lambda_exec" {
