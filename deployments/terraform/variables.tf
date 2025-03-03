@@ -25,3 +25,9 @@ variable "lambda_timeout" {
   type        = number
   default     = 3
 }
+
+variable "rollback_version" {
+  description = "The Lambda version to rollback to"
+  type        = string
+  default     = "$LATEST"
+}
