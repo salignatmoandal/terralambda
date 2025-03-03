@@ -1,10 +1,6 @@
 
 # Allow fast rollback to previous version if a deployment fails
 
-variable "rollback_version" {
-  description = "The Lambda version to rollback to"
-  type        = string
-}
 
 resource "aws_lambda_alias" "lambda_alias" {
   name             = "prod"
