@@ -1,4 +1,5 @@
 # TerraLambda CLI Documentation
+![gopher](https://github.com/user-attachments/assets/574a1305-a556-43f8-a832-be42da9240fa)
 
 ## Overview 
 TerraLambda is a CLI tool designed to simplify the deployment and invocation of AWS Lambda functions using Terraform. It streamlines the function lifecycle by automating packaging, deployment, and execution processes, providing a seamless experience for developers working with AWS Lambda.
