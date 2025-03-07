@@ -15,8 +15,10 @@ type LambdaInvoker struct {
 }
 
 // NewInvoker creates a new LambdaInvoker instance
-func NewInvoker(ctx context.Context) (*LambdaInvoker, error) {
-	cfg, err := config.LoadDefaultConfig(ctx)
+func NewInvoker(ctx context.Context, region string) (*LambdaInvoker, error) {
+	cfg, err := config.LoadDefaultConfig(ctx,
+		config.WithRegion(region),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load AWS config: %w", err)
 	}
