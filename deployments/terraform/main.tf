@@ -14,7 +14,7 @@ resource "null_resource" "lambda_zip" {
 }
 
 resource "aws_lambda_function" "terralambda_fn" {
-  function_name = "TerraLambdaExample"
+  function_name = "TerraLambdaExample1"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "bootstrap"
   runtime       = "provided.al2"
