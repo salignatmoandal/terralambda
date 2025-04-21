@@ -30,3 +30,9 @@ We welcome contributions to TerraLambda! Please follow these guidelines to help 
 1. Report Issues
 - Open a new issue for bug reports or feature requests.
 - Provide clear steps to reproduce, expected behavior, and any relevant logs.
+
+2. Fork & Branch
+
+Fork the repository to your GitHub account.
+
+Create a new branch: `git checkout -b feature/your-feature-name or bugfix/issue-number`.
