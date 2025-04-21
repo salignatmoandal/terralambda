@@ -40,3 +40,9 @@ We welcome contributions to TerraLambda! Please follow these guidelines to help 
 
 - Follow Go formatting conventions (gofmt) and Terraform style guidelines.
 - Lint your code before submitting (golangci-lint for Go, terraform fmt/terraform validate).
+
+4. Pull Request
+
+- Push your branch to GitHub and open a Pull Request against main.
+- Include a descriptive title and detailed description of changes.
+- Link related issues (e.g., Closes #<issue-number>).
