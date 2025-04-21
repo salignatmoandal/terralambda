@@ -26,3 +26,7 @@ Integrates Terraform state management to facilitate rollback operations.
 - AWS CLI (configured with proper credentials)
 
 # Contributing
+We welcome contributions to TerraLambda! Please follow these guidelines to help us maintain a healthy and productive project:
+1. Report Issues
+- Open a new issue for bug reports or feature requests.
+- Provide clear steps to reproduce, expected behavior, and any relevant logs.
