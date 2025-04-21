@@ -33,10 +33,10 @@ We welcome contributions to TerraLambda! Please follow these guidelines to help 
 
 2. Fork & Branch
 
-Fork the repository to your GitHub account.
--Create a new branch: `git checkout -b feature/your-feature-name or bugfix/issue-number`.
+- Fork the repository to your GitHub account.
+- Create a new branch: `git checkout -b feature/your-feature-name or bugfix/issue-number`.
 
-3.Code Style
+3. Code Style
 
--Follow Go formatting conventions (gofmt) and Terraform style guidelines.
--Lint your code before submitting (golangci-lint for Go, terraform fmt/terraform validate).
+- Follow Go formatting conventions (gofmt) and Terraform style guidelines.
+- Lint your code before submitting (golangci-lint for Go, terraform fmt/terraform validate).
