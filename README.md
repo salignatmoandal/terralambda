@@ -1,4 +1,4 @@
-# TerraLambda CLI Documentation
+# TerraLambda CLI 
 ![gopher](https://github.com/user-attachments/assets/574a1305-a556-43f8-a832-be42da9240fa)
 
 ## Overview 
